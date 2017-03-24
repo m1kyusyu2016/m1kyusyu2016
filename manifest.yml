@@ -1,10 +1,10 @@
 applications:
 - path: .
-  memory: 128M
+  memory: 256M
   instances: 1
   domain: mybluemix.net
-  name: m1kyusyu2016
-  host: m1kyusyu2016
+  name: nomi
+  host: nomi
   disk_quota: 1024M
   services:
   - m1kyusyu2016-cloudantNoSQLDB
