@@ -1,0 +1,127 @@
+[
+    {
+        "id": "53d4704c.06947",
+        "type": "tab",
+        "label": "フロー 1"
+    },
+    {
+        "id": "aafd0180.9ea47",
+        "type": "ibmiot in",
+        "z": "53d4704c.06947",
+        "authentication": "quickstart",
+        "apiKey": "",
+        "inputType": "evt",
+        "deviceId": "ed78467d3a5a",
+        "applicationId": "",
+        "deviceType": "+",
+        "eventType": "+",
+        "commandType": "",
+        "format": "json",
+        "name": "IBM IoT",
+        "service": "quickstart",
+        "allDevices": "",
+        "allApplications": "",
+        "allDeviceTypes": true,
+        "allEvents": true,
+        "allCommands": "",
+        "allFormats": "",
+        "qos": 0,
+        "x": 65,
+        "y": 74,
+        "wires": [
+            [
+                "8cbc9ff5.6f927"
+            ]
+        ]
+    },
+    {
+        "id": "13d62012.45e01",
+        "type": "function",
+        "z": "53d4704c.06947",
+        "name": "function",
+        "func": "\nif (Math.abs(msg.payload.ac.x) > 10 || Math.abs(msg.payload.ac.y) > 10 || Math.abs(msg.payload.ac.z) > 10) {\n    var date = context.global.moment();\n    date.locale(\"ja\").tz(\"Asia/Tokyo\");\n    \n    var channel_access_token = \"MRNlc0L6Q3InBRUBE7ON9R5/LfahjFEBUfwvQ1iGR2xfoPXIpjiVSK1CSbYScBK7mOUPIvder+KNcsDV2Bb/KnNJte8d4TWpgvSX4s7DdvrA1iOZYPABzDvICXCYEd7KrRHTnwjSulb4gcDGS4/2LgdB04t89/1O/w1cDnyilFU=\";\n    var line_user = \"R6828414cbcfc9b2bf30f2e1a4a3f854b\";\n\n\n    msg.headers = {\n        \"Content-Type\" : \"application/json\",\n       \"Authorization\" : \"Bearer \" + channel_access_token\n    };\n\n    msg.payload = {\n       \"to\" : line_user,\n          \"messages\" : [{\n             \"type\" : \"text\",\n                \"text\" : date.format(\"LLL\") + \" です。\"\n            }\n     ]\n    };\n    \n    \n} else {\n    msg.payload =　null;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 323,
+        "y": 141,
+        "wires": [
+            [
+                "b7a2026d.41a98"
+            ]
+        ]
+    },
+    {
+        "id": "b7a2026d.41a98",
+        "type": "switch",
+        "z": "53d4704c.06947",
+        "name": "switch",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "true",
+        "outputs": 1,
+        "x": 457,
+        "y": 171,
+        "wires": [
+            [
+                "b27037da.95d0e8"
+            ]
+        ]
+    },
+    {
+        "id": "97854a94.3a21d8",
+        "type": "debug",
+        "z": "53d4704c.06947",
+        "name": "",
+        "active": true,
+        "console": "false",
+        "complete": "payload",
+        "x": 740,
+        "y": 266,
+        "wires": []
+    },
+    {
+        "id": "b27037da.95d0e8",
+        "type": "http request",
+        "z": "53d4704c.06947",
+        "name": "http",
+        "method": "POST",
+        "ret": "txt",
+        "url": "https://api.line.me/v2/bot/message/push",
+        "tls": "",
+        "x": 582,
+        "y": 211,
+        "wires": [
+            [
+                "97854a94.3a21d8"
+            ]
+        ]
+    },
+    {
+        "id": "8cbc9ff5.6f927",
+        "type": "delay",
+        "z": "53d4704c.06947",
+        "name": "dalay",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "100",
+        "nbRateUnits": "",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "x": 190,
+        "y": 103,
+        "wires": [
+            [
+                "13d62012.45e01"
+            ]
+        ]
+    }
+]
